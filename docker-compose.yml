@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  fort:
+    image: fort
+    build: .
+
+  py-build:
+    image: fort
+    command: ["setup.py", "bdist_wheel"]
+
+  twine-upload:
+    image: fort
+    entrypoint: ["twine"]
+    command: ["upload", "--skip-existing", "--verbose", "dist/*"]
+
+  cleanup:
+    image: fort
+    entrypoint: ["rm", "-rf", "build", "dist", "fort.egg-info"]
