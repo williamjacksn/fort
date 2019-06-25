@@ -7,7 +7,7 @@ with open('README.md', 'r') as f:
 setuptools.setup(
     name='fort',
     version=fort.__version__,
-    description='A wrapper around some common database libraries',
+    description='The Python database micropackage',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/williamjacksn/fort',
