@@ -1,3 +1,3 @@
-from .fort import PGDatabase
+from .fort import PGDatabase, SQLiteDatabase
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
