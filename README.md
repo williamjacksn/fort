@@ -13,7 +13,7 @@ Start by initializing an object for your database, providing a connection string
 ```python
 import fort
 
-db = fort.PGDatabase('postgres://user:password@host/database')
+db = fort.PostgresDatabase('postgres://user:password@host/database')
 ```
 
 Each of fort's database classes provides a small set of methods that makes working with SQL simple. You can immediately
@@ -41,7 +41,7 @@ Using one of fort's database classes directly is fine, but it is better to conso
 subclassing one of fort's classes and adding your own methods:
 
 ```python
-class MyPGDatabase(fort.PGDatabase):
+class MyDatabase(fort.PostgresDatabase):
 
     def migrate(self):
         self.u('CREATE TABLE widgets (id uuid PRIMARY KEY, name text)')
@@ -64,7 +64,7 @@ class MyPGDatabase(fort.PGDatabase):
         sql = 'SELECT name FROM widgets WHERE id = %(id)s'
         return self.q_val(sql, {'id': widget_id})
 
-db = MyPGDatabase('postgres://user:password@host/database')
+db = MyDatabase('postgres://user:password@host/database')
 db.migrate()
 
 my_id = db.add_widget('Thingy')
@@ -111,9 +111,9 @@ def q_val(self, sql: str, params: Dict = None) -> Any: ...
 
 ## Notes on specific database classes
 
-### PGDatabase
+### PostgresDatabase
 
-Use `PGDatabase` to connect to a PostgreSQL database. Use `pyformat` [paramstyle][a] for all your statements.
+Use `PostgresDatabase` to connect to a PostgreSQL database. Use `pyformat` [paramstyle][a] for all your statements.
 Your connection string will be passed directly to [`psycopg2.connect()`][b].
 
 ### SQLiteDatabase
