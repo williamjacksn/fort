@@ -56,7 +56,7 @@ class SQLiteDatabase:
         self.cnx.row_factory = sqlite3.Row
         self.cnx.set_trace_callback(log_debug)
 
-    def _q_gen(self, sql: str, params: Dict = None) -> Generator[Dict]:
+    def _q_gen(self, sql: str, params: Dict = None) -> Generator[Dict, None, None]:
         if params is None:
             params = {}
         yield from self.cnx.execute(sql, params)
