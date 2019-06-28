@@ -4,11 +4,10 @@ import psycopg2.extras
 
 from typing import Any, Dict, List, Optional
 
-log = logging.getLogger(__name__)
-
 
 class PostgresDatabase:
     def __init__(self, dsn):
+        self.log = logging.getLogger(__name__)
         self.cnx = psycopg2.connect(dsn, cursor_factory=psycopg2.extras.DictCursor)
         self.cnx.autocommit = True
         psycopg2.extras.register_uuid()
@@ -18,7 +17,7 @@ class PostgresDatabase:
         if params is None:
             params = {}
         with self.cnx.cursor() as c:
-            log.debug(c.mogrify(sql, params).decode())
+            self.log.debug(c.mogrify(sql, params).decode())
             c.execute(sql, params)
             return c.fetchall()
 
@@ -39,6 +38,6 @@ class PostgresDatabase:
         if params is None:
             params = {}
         with self.cnx.cursor() as c:
-            log.debug(c.mogrify(sql, params).decode())
+            self.log.debug(c.mogrify(sql, params).decode())
             c.execute(sql, params)
             return c.rowcount

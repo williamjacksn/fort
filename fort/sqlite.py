@@ -5,8 +5,6 @@ import uuid
 
 from typing import Any, Dict, Generator, List, Optional
 
-log = logging.getLogger(__name__)
-
 
 def register_adapters_and_converters():
     def convert_bool(value: bytes) -> bool:
@@ -33,10 +31,11 @@ register_adapters_and_converters()
 
 class SQLiteDatabase:
     def __init__(self, dsn):
+        self.log = logging.getLogger(__name__)
         self.cnx = sqlite3.connect(dsn, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cnx.isolation_level = None
         self.cnx.row_factory = sqlite3.Row
-        self.cnx.set_trace_callback(log.debug)
+        self.cnx.set_trace_callback(self.log.debug)
 
     def _q_gen(self, sql: str, params: Dict = None) -> Generator[Dict, None, None]:
         if params is None:
