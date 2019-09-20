@@ -2,15 +2,15 @@ version: '3'
 
 services:
   fort-dev:
-    image: fort-dev
+    image: williamjackson/fort-dev
     build: .
 
   py-build:
-    image: fort-dev
+    image: williamjackson/fort-dev
     command: ["setup.py", "bdist_wheel"]
 
   twine-upload:
-    image: fort-dev
+    image: williamjackson/fort-dev
     entrypoint: ["twine"]
     command: ["upload", "--skip-existing", "--verbose", "dist/*"]
     environment:
@@ -18,5 +18,5 @@ services:
       TWINE_USERNAME:
 
   cleanup:
-    image: fort-dev
+    image: williamjackson/fort-dev
     entrypoint: ["rm", "-rf", "build", "dist", "fort.egg-info"]
