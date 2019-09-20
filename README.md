@@ -109,12 +109,21 @@ def q_val(self, sql: str, params: Dict = None) -> Any: ...
     """
 ```
 
+Each fort database class instance also has a logger at `self.log`:
+
+```python
+    db = MyDatabase('postgres://user:password@host/database')
+    db.log.info('Hello from my database class instance!')
+```
+
 ## Notes on specific database classes
 
 ### PostgresDatabase
 
 Use `PostgresDatabase` to connect to a PostgreSQL database. Use `pyformat` [paramstyle][a] for all your statements.
 Your connection string will be passed directly to [`psycopg2.connect()`][b].
+
+You are still responsible for installing `psycopg2`.
 
 ### SQLiteDatabase
 
