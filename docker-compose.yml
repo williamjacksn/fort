@@ -2,21 +2,33 @@ version: '3'
 
 services:
   fort-dev:
-    image: williamjackson/fort-dev
+    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
     build: .
 
   py-build:
-    image: williamjackson/fort-dev
-    command: ["setup.py", "bdist_wheel"]
+    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
+    command:
+      - setup.py
+      - bdist_wheel
 
   twine-upload:
-    image: williamjackson/fort-dev
-    entrypoint: ["twine"]
-    command: ["upload", "--skip-existing", "--verbose", "dist/*"]
+    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
+    entrypoint:
+      - twine
+    command:
+      - upload
+      - --skip-existing
+      - --verbose
+      - dist/*
     environment:
       TWINE_PASSWORD:
       TWINE_USERNAME:
 
   cleanup:
-    image: williamjackson/fort-dev
-    entrypoint: ["rm", "-rf", "build", "dist", "fort.egg-info"]
+    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
+    entrypoint:
+      - rm
+      - -rf
+      - build
+      - dist
+      - fort.egg-info
