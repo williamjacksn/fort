@@ -12,14 +12,15 @@ jobs:
     steps:
     - name: Check out the repository
       uses: actions/checkout@v1
-    - name: Log in to the registry
+    - name: Log in to the GitHub registry
       run: docker login --password "${{ secrets.GITHUB_TOKEN }}" --username "${GITHUB_ACTOR}" docker.pkg.github.com
-    - name: Set the container image name
+    - name: Set the image name and tag
       id: set-image-name
-      run: echo ::set-output name=image-name::docker.pkg.github.com/${GITHUB_REPOSITORY}/${IMAGE_NAME}:latest
-      env:
-        IMAGE_NAME: fort-dev
+      run: echo ::set-output name=image-name::fort-dev:latest
+    - name: Set the full GitHub image name
+      id: set-github-image-name
+      run: echo ::set-output name=image-name::docker.pkg.github.com/${GITHUB_REPOSITORY}/${{ steps.set-image-name.outputs.image-name }}
     - name: Build the container image
-      run: docker build --file Dockerfile --tag ${{ steps.set-image-name.outputs.image-name }} .
-    - name: Push the image to the registry
-      run: docker image push ${{ steps.set-image-name.outputs.image-name }}
+      run: docker build --file Dockerfile --tag ${{ steps.set-github-image-name.outputs.image-name }} .
+    - name: Push the image to the GitHub registry
+      run: docker image push ${{ steps.set-github-image-name.outputs.image-name }}
