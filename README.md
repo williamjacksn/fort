@@ -70,7 +70,7 @@ db.migrate()
 my_id = db.add_widget('Thingy')
 
 for widget in db.list_widgets():
-    print(widget['id', widget['name']])
+    print(widget['id'], widget['name'])
 
 my_widget = db.get_widget(my_id)
 print(my_widget['id'], my_widget['name'])
