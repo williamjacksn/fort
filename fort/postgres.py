@@ -17,6 +17,7 @@ class PostgresDatabase:
         if params is None:
             params = {}
         cnx = self.p.getconn()
+        cnx.autocommit = True
         with cnx.cursor() as c:
             self.log.debug(c.mogrify(sql, params).decode())
             c.execute(sql, params)
@@ -41,6 +42,7 @@ class PostgresDatabase:
         if params is None:
             params = {}
         cnx = self.p.getconn()
+        cnx.autocommit = True
         with cnx.cursor() as c:
             self.log.debug(c.mogrify(sql, params).decode())
             c.execute(sql, params)
