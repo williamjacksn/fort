@@ -4,6 +4,8 @@ services:
   fort-dev:
     image: docker.pkg.github.com/williamjacksn/fort/fort-dev
     build: .
+    volumes:
+      - ./:/fort
 
   py-build:
     image: docker.pkg.github.com/williamjacksn/fort/fort-dev
