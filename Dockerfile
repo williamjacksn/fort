@@ -8,6 +8,3 @@ RUN /usr/local/bin/pip install --no-cache-dir --requirement /fort/requirements.t
 ENV PYTHONUNBUFFERED="1"
 
 ENTRYPOINT ["/usr/local/bin/python"]
-
-COPY . /fort
-WORKDIR /fort
