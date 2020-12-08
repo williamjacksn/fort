@@ -2,13 +2,13 @@ version: '3.8'
 
 services:
   fort-dev:
-    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
+    image: ghcr.io/williamjacksn/fort-dev
     build: .
     volumes:
       - ./:/fort
 
   py-build:
-    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
+    image: ghcr.io/williamjacksn/fort-dev
     working_dir: /workspace
     volumes:
       - ./:/workspace
@@ -18,7 +18,7 @@ services:
       - bdist_wheel
 
   twine-upload:
-    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
+    image: ghcr.io/williamjacksn/fort-dev
     working_dir: /workspace
     volumes:
       - ./:/workspace
@@ -34,7 +34,7 @@ services:
       TWINE_USERNAME:
 
   cleanup:
-    image: docker.pkg.github.com/williamjacksn/fort/fort-dev
+    image: ghcr.io/williamjacksn/fort-dev
     entrypoint:
       - rm
       - -rf
