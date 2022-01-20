@@ -1,30 +1,43 @@
 version: '3.8'
 
 services:
-  fort-dev:
+  cleanup:
+    entrypoint:
+      - /bin/rm
+      - -fr
+      - build
+      - dist
+      - fort.egg-info
     image: ghcr.io/williamjacksn/fort-dev
-    build: .
+    init: true
     volumes:
-      - ./:/fort
+      - ./:/home/python/fort
+    working_dir: /home/python/fort
 
   py-build:
-    image: ghcr.io/williamjacksn/fort-dev
-    working_dir: /workspace
-    volumes:
-      - ./:/workspace
-    command:
+    entrypoint:
+      - /home/python/venv/bin/python
       - setup.py
       - sdist
       - bdist_wheel
+    image: ghcr.io/williamjacksn/fort-dev
+    init: true
+    volumes:
+      - ./:/home/python/fort
+    working_dir: /home/python/fort
+
+  shell:
+    entrypoint:
+      - /bin/sh
+    image: ghcr.io/williamjacksn/fort-dev
+    init: true
+    volumes:
+      - ./:/home/python/fort
+    working_dir: /home/python/fort
 
   twine-upload:
-    image: ghcr.io/williamjacksn/fort-dev
-    working_dir: /workspace
-    volumes:
-      - ./:/workspace
     entrypoint:
-      - /usr/local/bin/twine
-    command:
+      - /home/python/ven/bin/twine
       - upload
       - --skip-existing
       - --verbose
@@ -32,12 +45,8 @@ services:
     environment:
       TWINE_PASSWORD:
       TWINE_USERNAME:
-
-  cleanup:
     image: ghcr.io/williamjacksn/fort-dev
-    entrypoint:
-      - rm
-      - -rf
-      - build
-      - dist
-      - fort.egg-info
+    init: true
+    volumes:
+      - ./:/home/python/fort
+    working_dir: /home/python/fort
