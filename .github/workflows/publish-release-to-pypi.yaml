@@ -14,12 +14,12 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2.4.0
       - name: Build the package
-        run: docker-compose run -T py-build
+        run: docker-compose run --user="$(id -u):$(id -g)" -T py-build
       - name: Publish the package to PyPI
         run: docker-compose run -T twine-upload
         env:
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.twine_password }}
+          TWINE_USERNAME: ${{ secrets.twine_username }}
       - name: Get file names
         id: files
         run: |
