@@ -1,3 +1,4 @@
-__pycache__
 .idea
+dist
 docker-compose.override.yaml
+fort.egg-info

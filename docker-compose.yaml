@@ -5,9 +5,8 @@ services:
     entrypoint:
       - /bin/rm
       - -fr
-      - build
       - dist
-      - fort.egg-info
+      - src/fort.egg-info
     image: ghcr.io/williamjacksn/fort-dev
     init: true
     volumes:
@@ -17,9 +16,8 @@ services:
   py-build:
     entrypoint:
       - /home/python/venv/bin/python
-      - setup.py
-      - sdist
-      - bdist_wheel
+      - -m
+      - build
     image: ghcr.io/williamjacksn/fort-dev
     init: true
     volumes:
