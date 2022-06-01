@@ -52,7 +52,7 @@ pygments==2.9.0
     #   rich
 pyparsing==2.4.7
     # via packaging
-readme-renderer==29.0
+readme-renderer==35.0
     # via twine
 requests==2.25.1
     # via
@@ -67,14 +67,12 @@ rich==12.0.1
 secretstorage==3.3.1
     # via keyring
 six==1.16.0
-    # via
-    #   bleach
-    #   readme-renderer
+    # via bleach
 tomli==2.0.0
     # via
     #   build
     #   pep517
-twine==4.0.0
+twine==4.0.1
     # via -r requirements.in
 urllib3==1.26.5
     # via
