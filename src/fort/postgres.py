@@ -12,6 +12,16 @@ class PostgresDatabase:
         self.p = psycopg2.pool.ThreadedConnectionPool(minconn, maxconn, dsn, cursor_factory=psycopg2.extras.DictCursor)
         psycopg2.extras.register_uuid()
 
+    def b(self, sql: str, records: List[Dict]):
+        """Batch execute a query"""
+        cnx = self.p.getconn()
+        try:
+            with cnx:
+                with cnx.cursor() as cur:
+                    psycopg2.extras.execute_batch(cur, sql, records)
+        finally:
+            self.p.putconn(cnx)
+
     def q(self, sql: str, params: Dict = None) -> List[Dict]:
         """Execute a query and return all rows"""
         if params is None:
