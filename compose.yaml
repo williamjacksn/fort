@@ -33,7 +33,7 @@ services:
 
   twine-upload:
     entrypoint:
-      - /home/python/ven/bin/twine
+      - /home/python/venv/bin/twine
       - upload
       - --skip-existing
       - --verbose
