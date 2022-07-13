@@ -42,6 +42,9 @@ class SQLiteDatabase:
             params = {}
         yield from self.cnx.execute(sql, params)
 
+    def b(self, sql: str, params: List[Dict]):
+        self.cnx.executemany(sql, params)
+
     def q(self, sql: str, params: Dict = None) -> List[Dict]:
         return list(self._q_gen(sql, params))
 
