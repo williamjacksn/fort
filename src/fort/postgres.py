@@ -18,6 +18,8 @@ class PostgresDatabase:
         try:
             with cnx:
                 with cnx.cursor() as cur:
+                    self.log.debug(f'Batch query with {len(records)} parameter sets')
+                    self.log.debug(sql)
                     psycopg2.extras.execute_batch(cur, sql, records)
         finally:
             self.p.putconn(cnx)
