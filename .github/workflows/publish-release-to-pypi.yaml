@@ -23,16 +23,16 @@ jobs:
       - name: Get file names
         id: files
         run: |
-          echo "::set-output name=sdist::$(cd dist && ls *.gz)"
-          echo "::set-output name=wheel::$(cd dist && ls *.whl)"
+          echo "SDIST=$(cd dist && ls *.gz)" >> $GITHUB_OUTPUT
+          echo "WHEEL=$(cd dist && ls *.whl)" >> $GITHUB_OUTPUT
       - name: Upload sdist to release
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           asset_content_type: application/octet-stream
-          asset_path: ${{ github.workspace }}/dist/${{ steps.files.outputs.sdist }}
-          asset_name: ${{ steps.files.outputs.sdist }}
+          asset_path: ${{ github.workspace }}/dist/${{ steps.files.outputs.SDIST }}
+          asset_name: ${{ steps.files.outputs.SDIST }}
           upload_url: ${{ github.event.release.upload_url }}
       - name: Upload wheel to release
         uses: actions/upload-release-asset@v1.0.2
@@ -40,6 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           asset_content_type: application/octet-stream
-          asset_path: ${{ github.workspace }}/dist/${{ steps.files.outputs.wheel }}
-          asset_name: ${{ steps.files.outputs.wheel }}
+          asset_path: ${{ github.workspace }}/dist/${{ steps.files.outputs.WHEEL }}
+          asset_name: ${{ steps.files.outputs.WHEEL }}
           upload_url: ${{ github.event.release.upload_url }}
