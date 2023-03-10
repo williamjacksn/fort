@@ -37,7 +37,7 @@ jobs:
             const fs = require('node:fs/promises');
             const repo = '${{ github.repository }}'.split('/')[1]
 
-            const sdist_data = await fs.readFile('${{ github.workspace }}/${{ steps.files.outputs.SDIST }}');
+            const sdist_data = await fs.readFile('${{ github.workspace }}/dist/${{ steps.files.outputs.SDIST }}');
             await github.rest.repos.uploadReleaseAsset({
               owner: '${{ github.repository_owner }}',
               repo: repo,
@@ -46,7 +46,7 @@ jobs:
               data: sdist_data
             });
 
-            const wheel_data = await fs.readFile('${{ github.workspace }}/${{ steps.files.outputs.WHEEL }}');
+            const wheel_data = await fs.readFile('${{ github.workspace }}/dist/${{ steps.files.outputs.WHEEL }}');
             await github.rest.repos.uploadReleaseAsset({
               owner: '${{ github.repository_owner }}',
               repo: repo,
