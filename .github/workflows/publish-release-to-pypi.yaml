@@ -11,35 +11,46 @@ jobs:
     name: Publish the release package to PyPI
     runs-on: ubuntu-latest
     steps:
+
       - name: Check out the repository
         uses: actions/checkout@v3
+
       - name: Build the package
-        run: docker-compose run --user="$(id -u):$(id -g)" -T py-build
+        run: docker compose run --no-TTY --user="$(id -u):$(id -g)" py-build
+
       - name: Publish the package to PyPI
-        run: docker-compose run -T twine-upload
+        run: docker compose run --no-TTY twine-upload
         env:
           TWINE_PASSWORD: ${{ secrets.twine_password }}
           TWINE_USERNAME: ${{ secrets.twine_username }}
+
       - name: Get file names
         id: files
         run: |
           echo "SDIST=$(cd dist && ls *.gz)" >> $GITHUB_OUTPUT
           echo "WHEEL=$(cd dist && ls *.whl)" >> $GITHUB_OUTPUT
-      - name: Upload sdist to release
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload release assets
+        uses: actions/github-script@v6
         with:
-          asset_content_type: application/octet-stream
-          asset_path: ${{ github.workspace }}/dist/${{ steps.files.outputs.SDIST }}
-          asset_name: ${{ steps.files.outputs.SDIST }}
-          upload_url: ${{ github.event.release.upload_url }}
-      - name: Upload wheel to release
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          asset_content_type: application/octet-stream
-          asset_path: ${{ github.workspace }}/dist/${{ steps.files.outputs.WHEEL }}
-          asset_name: ${{ steps.files.outputs.WHEEL }}
-          upload_url: ${{ github.event.release.upload_url }}
+          script: |
+            const fs = require('node:fs/promises');
+            const repo = '${{ github.repository }}'.split('/')[1]
+
+            const sdist_data = await fs.readFile('${{ github.workspace }}/${{ steps.files.outputs.SDIST }}');
+            await github.rest.repos.uploadReleaseAsset({
+              owner: '${{ github.repository_owner }}',
+              repo: repo,
+              release_id: '${{ github.event.release.id }}',
+              name: '${{ steps.files.outputs.SDIST }}',
+              data: sdist_data
+            });
+
+            const wheel_data = await fs.readFile('${{ github.workspace }}/${{ steps.files.outputs.WHEEL }}');
+            await github.rest.repos.uploadReleaseAsset({
+              owner: '${{ github.repository_owner }}',
+              repo: repo,
+              release_id: '${{ github.event.release.id }}',
+              name: '${{ steps.files.outputs.WHEEL }}',
+              data: wheel_data
+            });
