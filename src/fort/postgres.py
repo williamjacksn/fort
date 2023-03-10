@@ -2,6 +2,7 @@ import logging
 import psycopg2
 import psycopg2.extras
 import psycopg2.pool
+import textwrap
 
 from typing import Any, Dict, List, Optional
 
@@ -19,7 +20,7 @@ class PostgresDatabase:
             with cnx:
                 with cnx.cursor() as cur:
                     self.log.debug(f'Batch query with {len(records)} parameter sets')
-                    self.log.debug(sql)
+                    self.log.debug(textwrap.dedent(sql))
                     psycopg2.extras.execute_batch(cur, sql, records)
         finally:
             self.p.putconn(cnx)
@@ -33,7 +34,7 @@ class PostgresDatabase:
         try:
             with cnx:
                 with cnx.cursor() as c:
-                    self.log.debug(c.mogrify(sql, params).decode())
+                    self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
                     c.execute(sql, params)
                     result = c.fetchall()
         finally:
@@ -61,7 +62,7 @@ class PostgresDatabase:
         try:
             with cnx:
                 with cnx.cursor() as c:
-                    self.log.debug(c.mogrify(sql, params).decode())
+                    self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
                     c.execute(sql, params)
                     result = c.rowcount
         finally:
