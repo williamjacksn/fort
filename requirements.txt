@@ -44,7 +44,7 @@ packaging==23.0
     # via build
 pkginfo==1.9.6
     # via twine
-psycopg2==2.9.5
+psycopg2==2.9.6
     # via -r requirements.in
 pycparser==2.21
     # via cffi
