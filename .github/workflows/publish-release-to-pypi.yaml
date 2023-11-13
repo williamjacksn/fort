@@ -31,7 +31,7 @@ jobs:
           echo "WHEEL=$(cd dist && ls *.whl)" >> $GITHUB_OUTPUT
 
       - name: Upload release assets
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require('node:fs/promises');
