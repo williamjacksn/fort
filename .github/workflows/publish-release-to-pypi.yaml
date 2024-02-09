@@ -10,6 +10,11 @@ jobs:
   publish:
     name: Publish the release package to PyPI
     runs-on: ubuntu-latest
+    environment:
+      name: pypi-release
+      url: https://pypi.org/p/fort
+    permissions:
+      id-token: write
     steps:
 
       - name: Check out the repository
@@ -19,38 +24,4 @@ jobs:
         run: docker compose run --no-TTY --user="$(id -u):$(id -g)" py-build
 
       - name: Publish the package to PyPI
-        run: docker compose run --no-TTY twine-upload
-        env:
-          TWINE_PASSWORD: ${{ secrets.twine_password }}
-          TWINE_USERNAME: ${{ secrets.twine_username }}
-
-      - name: Get file names
-        id: files
-        run: |
-          echo "SDIST=$(cd dist && ls *.gz)" >> $GITHUB_OUTPUT
-          echo "WHEEL=$(cd dist && ls *.whl)" >> $GITHUB_OUTPUT
-
-      - name: Upload release assets
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('node:fs/promises');
-            const repo = '${{ github.repository }}'.split('/')[1]
-
-            const sdist_data = await fs.readFile('${{ github.workspace }}/dist/${{ steps.files.outputs.SDIST }}');
-            await github.rest.repos.uploadReleaseAsset({
-              owner: '${{ github.repository_owner }}',
-              repo: repo,
-              release_id: '${{ github.event.release.id }}',
-              name: '${{ steps.files.outputs.SDIST }}',
-              data: sdist_data
-            });
-
-            const wheel_data = await fs.readFile('${{ github.workspace }}/dist/${{ steps.files.outputs.WHEEL }}');
-            await github.rest.repos.uploadReleaseAsset({
-              owner: '${{ github.repository_owner }}',
-              repo: repo,
-              release_id: '${{ github.event.release.id }}',
-              name: '${{ steps.files.outputs.WHEEL }}',
-              data: wheel_data
-            });
+        uses: pypa/gh-action-pypi-publish@release/v1
