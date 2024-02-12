@@ -21,9 +21,7 @@ docutils==0.20.1
 idna==3.6
     # via requests
 importlib-metadata==7.0.1
-    # via
-    #   keyring
-    #   twine
+    # via twine
 jaraco-classes==3.3.0
     # via keyring
 jeepney==0.8.0
@@ -68,7 +66,7 @@ rich==13.7.0
     # via twine
 secretstorage==3.3.3
     # via keyring
-twine==4.0.2
+twine==5.0.0
     # via -r requirements.in
 urllib3==2.2.0
     # via
