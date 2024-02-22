@@ -30,19 +30,3 @@ services:
     volumes:
       - ./:/home/python/fort
     working_dir: /home/python/fort
-
-  twine-upload:
-    entrypoint:
-      - /home/python/venv/bin/twine
-      - upload
-      - --skip-existing
-      - --verbose
-      - dist/*
-    environment:
-      TWINE_PASSWORD:
-      TWINE_USERNAME:
-    image: ghcr.io/williamjacksn/fort-dev
-    init: true
-    volumes:
-      - ./:/home/python/fort
-    working_dir: /home/python/fort
