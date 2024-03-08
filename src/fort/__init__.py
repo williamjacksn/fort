@@ -7,4 +7,4 @@ except ModuleNotFoundError:
 
 from .sqlite import SQLiteDatabase
 
-__version__ = '2024.1'
+__version__ = '2024.2'
