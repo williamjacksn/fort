@@ -11,6 +11,15 @@ services:
       - ./:/home/python/fort
     working_dir: /home/python/fort
 
+  pip-compile:
+    entrypoint:
+      - /home/python/venv/bin/pip-compile
+    image: ghcr.io/williamjacksn/pip-tools:py3.12
+    init: true
+    volumes:
+      - ./:/home/python/fort
+    working_dir: /home/python/fort
+
   py-build:
     entrypoint:
       - /home/python/venv/bin/python
@@ -24,7 +33,7 @@ services:
 
   shell:
     entrypoint:
-      - /bin/sh
+      - /bin/bash
     image: ghcr.io/williamjacksn/fort-dev
     init: true
     volumes:
