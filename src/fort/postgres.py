@@ -10,7 +10,9 @@ from typing import Any, Dict, List, Optional
 class PostgresDatabase:
     def __init__(self, dsn, minconn=1, maxconn=1):
         self.log = logging.getLogger(__name__)
-        self.p = psycopg2.pool.ThreadedConnectionPool(minconn, maxconn, dsn, cursor_factory=psycopg2.extras.DictCursor)
+        self.p = psycopg2.pool.ThreadedConnectionPool(
+            minconn, maxconn, dsn, cursor_factory=psycopg2.extras.DictCursor
+        )
         psycopg2.extras.register_uuid()
 
     def b(self, sql: str, records: List[Dict]):
@@ -19,7 +21,7 @@ class PostgresDatabase:
         try:
             with cnx:
                 with cnx.cursor() as cur:
-                    self.log.debug(f'Batch query with {len(records)} parameter sets')
+                    self.log.debug(f"Batch query with {len(records)} parameter sets")
                     self.log.debug(textwrap.dedent(sql))
                     psycopg2.extras.execute_batch(cur, sql, records)
         finally:

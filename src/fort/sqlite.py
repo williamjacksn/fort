@@ -9,28 +9,28 @@ from typing import Any, Dict, Generator, List, Optional
 
 def register_adapters_and_converters():
     def convert_bool(value: bytes) -> bool:
-        return value == b'True'
+        return value == b"True"
 
     sqlite3.register_adapter(bool, str)
-    sqlite3.register_converter('bool', convert_bool)
+    sqlite3.register_converter("bool", convert_bool)
 
     def convert_date(value: bytes) -> datetime.date:
         return datetime.date.fromisoformat(value.decode())
-    
+
     sqlite3.register_adapter(datetime.date, str)
-    sqlite3.register_converter('date', convert_date)
+    sqlite3.register_converter("date", convert_date)
 
     def convert_decimal(value: bytes) -> decimal.Decimal:
         return decimal.Decimal(value.decode())
 
     sqlite3.register_adapter(decimal.Decimal, str)
-    sqlite3.register_converter('decimal', convert_decimal)
+    sqlite3.register_converter("decimal", convert_decimal)
 
     def convert_uuid(value: bytes) -> uuid.UUID:
         return uuid.UUID(value.decode())
 
     sqlite3.register_adapter(uuid.UUID, str)
-    sqlite3.register_converter('uuid', convert_uuid)
+    sqlite3.register_converter("uuid", convert_uuid)
 
 
 register_adapters_and_converters()
