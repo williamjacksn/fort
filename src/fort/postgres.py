@@ -31,17 +31,15 @@ class PostgresDatabase:
         """Execute a query and return all rows"""
         if params is None:
             params = {}
-        result = []
         cnx = self.p.getconn()
         try:
             with cnx:
                 with cnx.cursor() as c:
                     self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
                     c.execute(sql, params)
-                    result = c.fetchall()
+                    return c.fetchall()
         finally:
             self.p.putconn(cnx)
-            return result
 
     def q_one(self, sql: str, params: dict | None = None) -> dict | None:
         """Execute a query and return the first row, or None if there are no rows"""
@@ -60,14 +58,12 @@ class PostgresDatabase:
         """Execute a statement and return the number of rows affected"""
         if params is None:
             params = {}
-        result = 0
         cnx = self.p.getconn()
         try:
             with cnx:
                 with cnx.cursor() as c:
                     self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
                     c.execute(sql, params)
-                    result = c.rowcount
+                    return c.rowcount
         finally:
             self.p.putconn(cnx)
-            return result
