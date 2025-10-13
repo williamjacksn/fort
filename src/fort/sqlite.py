@@ -2,12 +2,11 @@ import datetime
 import decimal
 import logging
 import sqlite3
+import typing
 import uuid
 
-from typing import Any, Dict, Generator, List, Optional
 
-
-def register_adapters_and_converters():
+def register_adapters_and_converters() -> None:
     def convert_bool(value: bytes) -> bool:
         return value == b"True"
 
@@ -37,35 +36,35 @@ register_adapters_and_converters()
 
 
 class SQLiteDatabase:
-    def __init__(self, dsn):
+    def __init__(self, dsn: str) -> None:
         self.log = logging.getLogger(__name__)
         self.cnx = sqlite3.connect(dsn, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cnx.isolation_level = None
         self.cnx.row_factory = sqlite3.Row
         self.cnx.set_trace_callback(self.log.debug)
 
-    def _q_gen(self, sql: str, params: Dict = None) -> Generator[Dict, None, None]:
+    def _q_gen(self, sql: str, params: dict | None = None) -> typing.Iterator[dict]:
         if params is None:
             params = {}
         yield from self.cnx.execute(sql, params)
 
-    def b(self, sql: str, params: List[Dict]):
+    def b(self, sql: str, params: list[dict]) -> None:
         self.cnx.executemany(sql, params)
 
-    def q(self, sql: str, params: Dict = None) -> List[Dict]:
+    def q(self, sql: str, params: dict | None = None) -> list[dict]:
         return list(self._q_gen(sql, params))
 
-    def q_one(self, sql: str, params: Dict = None) -> Optional[Dict]:
+    def q_one(self, sql: str, params: dict | None = None) -> dict | None:
         for r in self._q_gen(sql, params):
             return r
         return None
 
-    def q_val(self, sql: str, params: Dict = None) -> Any:
+    def q_val(self, sql: str, params: dict | None = None) -> typing.Any:  # noqa: ANN401
         for r in self._q_gen(sql, params):
             return r[0]
         return None
 
-    def u(self, sql: str, params: Dict = None) -> int:
+    def u(self, sql: str, params: dict | None = None) -> int:
         if params is None:
             params = {}
         c = self.cnx.execute(sql, params)
