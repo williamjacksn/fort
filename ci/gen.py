@@ -1,7 +1,7 @@
 import json
 import pathlib
 
-ACTIONS_CHECKOUT = {"name": "Check out repository", "uses": "actions/checkout@v5"}
+ACTIONS_CHECKOUT = {"name": "Check out repository", "uses": "actions/checkout@v6"}
 DEFAULT_BRANCH = "master"
 THIS_FILE = pathlib.PurePosixPath(
     pathlib.Path(__file__).relative_to(pathlib.Path.cwd())
