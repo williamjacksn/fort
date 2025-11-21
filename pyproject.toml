@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "uv_build"
-requires = ["uv-build>=0.9.2,<0.10.0"]
+requires = ["uv-build>=0.9.11,<0.10.0"]
 
 [project]
 name = "fort"
@@ -24,8 +24,8 @@ email = "william@subtlecoolness.com"
 
 [dependency-groups]
 dev = [
-    "ruff>=0.14.0",
-    "uv-build>=0.9.2",
+    "ruff>=0.14.5",
+    "uv-build>=0.9.11",
 ]
 
 [tool.ruff.lint]
