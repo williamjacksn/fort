@@ -7,7 +7,7 @@ name = "fort"
 version = "2025.1"
 description = "The Python database micropackage"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
