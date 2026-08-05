@@ -13,7 +13,7 @@ Start by initializing an object for your database, providing a connection string
 ```python
 import fort
 
-db = fort.PostgresDatabase('postgres://user:password@host/database')
+db = fort.PostgresDatabase("postgres://user:password@host/database")
 ```
 
 Each of fort's database classes provides a small set of methods that makes working with SQL simple. You can immediately
@@ -22,18 +22,21 @@ begin making queries to the database:
 ```python
 import uuid
 
-db.u('CREATE TABLE widgets (id uuid PRIMARY KEY, name text)')
+db.u("CREATE TABLE widgets (id uuid PRIMARY KEY, name text)")
 
 my_id = uuid.uuid4()
-db.u('INSERT INTO widgets (id, name) VALUES (%(id)s, %(name)s)', {'id': my_id, 'name': 'Thingy'})
+db.u(
+    "INSERT INTO widgets (id, name) VALUES (%(id)s, %(name)s)",
+    {"id": my_id, "name": "Thingy"},
+)
 
-for row in db.q('SELECT id, name FROM widgets'):
-    print(row['id'], row['name'])
+for row in db.q("SELECT id, name FROM widgets"):
+    print(row["id"], row["name"])
 
-my_widget = db.q_one('SELECT id, name FROM widgets WHERE id = %(id)s', {'id': my_id})
-print(my_widget['name'])
+my_widget = db.q_one("SELECT id, name FROM widgets WHERE id = %(id)s", {"id": my_id})
+print(my_widget["name"])
 
-my_widget_name = db.q_val('SELECT name FROM widgets WHERE id = %(id)s', {'id': my_id})
+my_widget_name = db.q_val("SELECT name FROM widgets WHERE id = %(id)s", {"id": my_id})
 print(my_id, my_widget_name)
 ```
 
@@ -42,38 +45,38 @@ subclassing one of fort's classes and adding your own methods:
 
 ```python
 class MyDatabase(fort.PostgresDatabase):
-
     def migrate(self):
-        self.u('CREATE TABLE widgets (id uuid PRIMARY KEY, name text)')
+        self.u("CREATE TABLE widgets (id uuid PRIMARY KEY, name text)")
 
     def add_widget(self, widget_name: str) -> uuid.UUID:
         new_id = uuid.uuid4()
-        sql = 'INSERT INTO widgets (id, name) VALUES (%(id)s, %(name)s)'
-        params = {'id': new_id, 'name': widget_name}
+        sql = "INSERT INTO widgets (id, name) VALUES (%(id)s, %(name)s)"
+        params = {"id": new_id, "name": widget_name}
         self.u(sql, params)
         return new_id
 
     def list_widgets(self) -> List[Dict]:
-        return self.q('SELECT id, name FROM widgets')
+        return self.q("SELECT id, name FROM widgets")
 
     def get_widget(self, widget_id: uuid.UUID) -> Optional[Dict]:
-        sql = 'SELECT id, name FROM widgets WHERE id = %(id)s'
-        return self.q_one(sql, {'id': widget_id})
+        sql = "SELECT id, name FROM widgets WHERE id = %(id)s"
+        return self.q_one(sql, {"id": widget_id})
 
     def get_widget_name(self, widget_id: uuid.UUID) -> Optional[str]:
-        sql = 'SELECT name FROM widgets WHERE id = %(id)s'
-        return self.q_val(sql, {'id': widget_id})
+        sql = "SELECT name FROM widgets WHERE id = %(id)s"
+        return self.q_val(sql, {"id": widget_id})
 
-db = MyDatabase('postgres://user:password@host/database')
+
+db = MyDatabase("postgres://user:password@host/database")
 db.migrate()
 
-my_id = db.add_widget('Thingy')
+my_id = db.add_widget("Thingy")
 
 for widget in db.list_widgets():
-    print(widget['id'], widget['name'])
+    print(widget["id"], widget["name"])
 
 my_widget = db.get_widget(my_id)
-print(my_widget['id'], my_widget['name'])
+print(my_widget["id"], my_widget["name"])
 
 my_widget_name = db.get_widget_name(my_id)
 print(my_id, my_widget_name)
@@ -112,8 +115,8 @@ def q_val(self, sql: str, params: Dict = None) -> Any: ...
 Each fort database class instance also has a logger at `self.log`:
 
 ```python
-    db = MyDatabase('postgres://user:password@host/database')
-    db.log.info('Hello from my database class instance!')
+db = MyDatabase("postgres://user:password@host/database")
+db.log.info("Hello from my database class instance!")
 ```
 
 ## Notes on specific database classes

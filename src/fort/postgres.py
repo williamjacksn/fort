@@ -19,11 +19,10 @@ class PostgresDatabase:
         """Batch execute a query"""
         cnx = self.p.getconn()
         try:
-            with cnx:
-                with cnx.cursor() as cur:
-                    self.log.debug(f"Batch query with {len(records)} parameter sets")
-                    self.log.debug(textwrap.dedent(sql))
-                    psycopg2.extras.execute_batch(cur, sql, records)
+            with cnx, cnx.cursor() as cur:
+                self.log.debug(f"Batch query with {len(records)} parameter sets")
+                self.log.debug(textwrap.dedent(sql))
+                psycopg2.extras.execute_batch(cur, sql, records)
         finally:
             self.p.putconn(cnx)
 
@@ -33,11 +32,10 @@ class PostgresDatabase:
             params = {}
         cnx = self.p.getconn()
         try:
-            with cnx:
-                with cnx.cursor() as c:
-                    self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
-                    c.execute(sql, params)
-                    return c.fetchall()
+            with cnx, cnx.cursor() as c:
+                self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
+                c.execute(sql, params)
+                return c.fetchall()
         finally:
             self.p.putconn(cnx)
 
@@ -60,10 +58,9 @@ class PostgresDatabase:
             params = {}
         cnx = self.p.getconn()
         try:
-            with cnx:
-                with cnx.cursor() as c:
-                    self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
-                    c.execute(sql, params)
-                    return c.rowcount
+            with cnx, cnx.cursor() as c:
+                self.log.debug(textwrap.dedent(c.mogrify(sql, params).decode()))
+                c.execute(sql, params)
+                return c.rowcount
         finally:
             self.p.putconn(cnx)
