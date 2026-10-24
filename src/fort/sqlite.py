@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import decimal
 import logging
 import sqlite3
@@ -13,10 +13,10 @@ def register_adapters_and_converters() -> None:
     sqlite3.register_adapter(bool, str)
     sqlite3.register_converter("bool", convert_bool)
 
-    def convert_date(value: bytes) -> datetime.date:
-        return datetime.date.fromisoformat(value.decode())
+    def convert_date(value: bytes) -> dt.date:
+        return dt.date.fromisoformat(value.decode())
 
-    sqlite3.register_adapter(datetime.date, str)
+    sqlite3.register_adapter(dt.date, str)
     sqlite3.register_converter("date", convert_date)
 
     def convert_decimal(value: bytes) -> decimal.Decimal:
